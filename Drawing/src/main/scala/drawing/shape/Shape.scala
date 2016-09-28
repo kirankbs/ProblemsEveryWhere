@@ -17,12 +17,13 @@ case class Line(co1:Coordinate,co2:Coordinate,c:Colour) extends Shape {
 case class Rectangle(x1y1:Coordinate, x2y2:Coordinate, c:Colour) extends Shape() {
 
   override def draw(): List[Pixel] = {
-    drawHelper((x1y1._1,x2y2._1), x => Pixel((x,x1y1._2),c)) ++
-      drawHelper((x1y1._1,x2y2._1),x => Pixel((x,x2y2._2),c)) ++
-      drawHelper((x1y1._2,x2y2._2),y => Pixel((x1y1._1,y),c)) ++
-      drawHelper((x1y1._2,x2y2._2),y => Pixel((x2y2._1,y),c))
+    drawHelper(minMax(x1y1._1,x2y2._1), x => Pixel((x,x1y1._2),c)) ++
+      drawHelper(minMax(x1y1._1,x2y2._1),x => Pixel((x,x2y2._2),c)) ++
+      drawHelper(minMax(x1y1._2,x2y2._2),y => Pixel((x1y1._1,y),c)) ++
+      drawHelper(minMax(x1y1._2,x2y2._2),y => Pixel((x2y2._1,y),c))
   }
   private def drawHelper(co:BoundaryBetweenPixels,f: tracePixel): List[Pixel] = ((co._1 to co._2) map (x => f(x))).toList
+  private def minMax(co: BoundaryBetweenPixels) = (co._1 min co._2,co._1 max co._2)
 }
 object Shape{
   def line(co1: Coordinate,co2: Coordinate,c: Colour): Shape = Line(co1,co2,c)
