@@ -11,29 +11,32 @@ class PixelTest {
   @Test
   def itShouldCreateEmptyPixel(): Unit ={
     //given
-    val p:Pixel  = Pixel(10,5)
+    val co:Coordinate = (10,5)
+    val p:Pixel  = Pixel((co))
     //when
     //then
-    assertTrue(p.isEmpty())
+    assertTrue(p.isColoured())
   }
 
   @Test
   def itShouldCreateColouredPixelByAddingColourToEmptyPixel(): Unit ={
     //given
-    val emptyPixel: Pixel = Pixel(3,5)
+    val co: Coordinate = (3,5)
+    val emptyPixel: Pixel = Pixel(co)
     //when
     val clolouredPixel: Pixel = emptyPixel.fillColour('*')
     //then
-    assertFalse(clolouredPixel.isEmpty())
+    assertFalse(clolouredPixel.isColoured())
   }
 
   @Test
   def emptyPixelColourShouldbeEmpty(): Unit ={
     //given
-    val pixel: Pixel = Pixel(2,3)
+    val co: Coordinate = (2,3)
+    val pixel: Pixel = Pixel(co)
     //when
-    val expected = ' '
-    val actual = pixel.colour()
+    val expected: Colour = ' '
+    val actual: Colour = pixel.colour()
     //then
     assertEquals(expected,actual)
   }
@@ -41,19 +44,21 @@ class PixelTest {
   @Test
   def itShouldCreateColouredPixel(): Unit ={
     //given
-    val p:Pixel  = Pixel(10,5,'*')
+    val co: Coordinate  = (10,5)
+    val p:Pixel  = Pixel(co,'*')
     //when
     //then
-    assertFalse(p.isEmpty())
+    assertFalse(p.isColoured())
   }
 
   @Test
   def colouredPixelSHouldGiveColour(): Unit ={
     //given
-    val pixel: Pixel = Pixel(5,5,'*')
+    val co: Coordinate  = (5,5)
+    val pixel: Pixel = Pixel(co,'*')
     //when
-    val expected: Char = '*'
-    val actual: Char  = pixel.colour()
+    val expected: Colour = '*'
+    val actual: Colour  = pixel.colour()
     //then
     assertEquals(expected,actual)
   }
