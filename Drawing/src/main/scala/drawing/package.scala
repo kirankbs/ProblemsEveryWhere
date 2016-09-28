@@ -4,6 +4,8 @@
 package object drawing {
 
   type Coordinate = (Int,Int)
+  type BoundaryBetweenPixels = (Int,Int)
   type Colour     = Char
 
+  type tracePixel = Int => Pixel
 }
