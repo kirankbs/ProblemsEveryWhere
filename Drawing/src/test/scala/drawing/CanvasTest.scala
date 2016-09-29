@@ -28,18 +28,6 @@ class CanvasTest {
     actual.foreach(e => e.isColoured() shouldBe true)
   }
 
-/*  @Test
-  def itShouldCreateFilledCanvas(): Unit ={
-    //given
-    val canvas: Canvas = Canvas(5,5)
-    val co1: Coordinate = (1,5)
-    val co2: Coordinate = (5,5)
-    //when
-    val canvas: Canvas = canvas.draw(Shape(co1,co2))
-    //then
-    assertFalse()
-  }*/
-
   @Test
   def filledCanvasShouldGiveCanvasWithColouredPixels(){}
 

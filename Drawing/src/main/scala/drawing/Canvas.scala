@@ -3,9 +3,11 @@ package drawing
 /**
   * Created by kirankumar on 28-09-2016.
   */
-trait Canvas {
+sealed trait Canvas {
   def isEmpty():Boolean
   def pixels(): List[Pixel]
+  def width: Width
+  def height: Height
 
 
   def generatePixels(w: Int,h: Int): List[Pixel] =
@@ -13,17 +15,21 @@ trait Canvas {
       (0 to h) map (h => Pixel((w,h))))).toList
 }
 
-protected case class EmptyCanvas(width: Int,height: Int) extends Canvas{
+sealed protected case class EmptyCanvas(w: Width,h: Height) extends Canvas{
   override def isEmpty(): Boolean = true
-  override def pixels():List[Pixel] = generatePixels(width,height)
+  override def width: Width = w
+  override def height: Height = h
+  override def pixels():List[Pixel] = generatePixels(w,h)
 }
 
-protected case class FilledCanvas(w: Int,h: Int) extends Canvas{
+sealed protected case class FilledCanvas(w: Width,h: Height,cP: Pixels) extends Canvas{
   override def isEmpty(): Boolean = false
-
-  override def pixels(): List[Pixel] = ???
+  override def width: Width = w
+  override def height: Height = h
+  override def pixels(): List[Pixel] = cP
 }
 
 object Canvas{
-  def apply(w: Int,h: Int): Canvas = EmptyCanvas(w,h)
+  def apply(w: Width,h: Height): Canvas = EmptyCanvas(w,h)
+  def apply(w: Width,h: Height,cP: Pixels): Canvas = FilledCanvas(w,h,cP)
 }

@@ -5,41 +5,40 @@ import drawing._
 /**
   * Created by kirankumarbs on 9/28/2016.
   */
-trait Shape {
+sealed trait Shape {
   def draw():List[Pixel]
 
   def drawHelper(co:BoundaryBetweenPixels,f: tracePixel): List[Pixel] = ((co._1 to co._2) map (x => f(x))).toList
   def minMax(co: BoundaryBetweenPixels) = (co._1 min co._2,co._1 max co._2)
 }
 
-case class Line(co1:Coordinate,co2:Coordinate,c:Colour) extends Shape {
+sealed case class Line(co1:Coordinate,co2:Coordinate) extends Shape {
   override def draw(): List[Pixel] =
-    //drawHelper(minMax(co1._2,co2._2),(y:Int) => Pixel((co1._1,y),c))
-    ((co1._1 to co2._1) flatMap (x => (co1._2 to co2._2) map (y => Pixel((x,y),c)))).toList
+    ((co1._1 to co2._1) flatMap (x => (co1._2 to co2._2) map (y => Pixel((x,y))))).toList
 
 }
-case class Rectangle(x1y1:Coordinate, x2y2:Coordinate, c:Colour) extends Shape() {
+sealed case class Rectangle(x1y1:Coordinate, x2y2:Coordinate) extends Shape() {
 
   override def draw(): List[Pixel] = {
-    def loop(bs: Boundaries,acc:List[Pixel]):List[Pixel] =bs match {
+    def drawLoop(bs: Boundaries,acc:List[Pixel]):List[Pixel] =bs match {
       case Nil    => acc
-      case x::xs  => loop(xs,acc ++ drawHelper(x._1,x._2))
+      case x::xs  => drawLoop(xs,acc ++ drawHelper(x._1,x._2))
       case _      => acc
-
     }
-    val b: Boundaries =
-      List((minMax(x1y1._1,x2y2._1),(x: Int) => Pixel((x,x1y1._2),c)),
-        (minMax(x1y1._1,x2y2._1),(x: Int) => Pixel((x,x2y2._2),c)),
-        (minMax(x1y1._2,x2y2._2),(y:Int) => Pixel((x1y1._1,y),c)),
-        (minMax(x1y1._2,x2y2._2),(y: Int) => Pixel((x2y2._1,y),c)))
+    drawLoop(getRectangleBoundaries(),List())
 
-    loop(b,List())
+  }
 
+  private def getRectangleBoundaries(): Boundaries ={
+    List((minMax(x1y1._1,x2y2._1),(x: Int) => Pixel((x,x1y1._2))),
+      (minMax(x1y1._1,x2y2._1),(x: Int) => Pixel((x,x2y2._2))),
+      (minMax(x1y1._2,x2y2._2),(y:Int) => Pixel((x1y1._1,y))),
+      (minMax(x1y1._2,x2y2._2),(y: Int) => Pixel((x2y2._1,y))))
   }
 }
 object Shape{
-  def line(co1: Coordinate,co2: Coordinate,c: Colour): Shape = Line(co1,co2,c)
-  def rect(co1: Coordinate,co2: Coordinate,c:Colour): Shape = Rectangle(co1,co2,c)
+  def line(co1: Coordinate,co2: Coordinate): Shape = Line(co1,co2)
+  def rect(co1: Coordinate,co2: Coordinate): Shape = Rectangle(co1,co2)
 }
 
 
