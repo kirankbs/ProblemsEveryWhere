@@ -1,6 +1,6 @@
 package drawing.paint
 
-import drawing.{Canvas, Colour, Pixel, Pixels}
+import drawing._
 import drawing.shape.Shape
 
 /**
@@ -23,5 +23,13 @@ case class PaintCanvas(c:Canvas,s:Shape,colour: Colour) extends Paint {
 }
 
 object Paint{
-  def apply(canvas: Canvas, shape:Shape,colour:Colour): Paint = PaintCanvas(canvas,shape,colour)
+  def apply(canvas: Canvas, shape:Shape,colour:Colour): Paint = validateShapeBoundariesOnCanvas(canvas,shape,colour)
+
+  private def validateShapeBoundariesOnCanvas(c:Canvas,s:Shape,colour: Colour):Paint = (s.x1y1,s.x2y2) match {
+    case (x1y1,x2y2) if(isValid(c,x1y1,x2y2)) => PaintCanvas(c,s,colour)
+    case _ => throw new Error("Shape Coordinates are not inside Canvas")
+  }
+
+  private def isValid(c: Canvas,x1y1:Coordinate,x2y2: Coordinate): Boolean =
+    x1y1._1 <= c.width && x1y1._2 <= c.height && x2y2._1 <= c.width && x2y2._2 <= c.height
 }

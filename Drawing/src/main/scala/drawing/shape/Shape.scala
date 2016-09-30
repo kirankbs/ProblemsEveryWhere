@@ -7,14 +7,16 @@ import drawing._
   */
 sealed trait Shape {
   def draw():List[Pixel]
-
+  def x1y1: Coordinate
+  def x2y2: Coordinate
   def drawHelper(co:BoundaryBetweenPixels,f: tracePixel): List[Pixel] = ((co._1 to co._2) map (x => f(x))).toList
   def minMax(co: BoundaryBetweenPixels) = (co._1 min co._2,co._1 max co._2)
 }
 
-sealed case class Line(co1:Coordinate,co2:Coordinate) extends Shape {
+sealed case class Line(x1y1:Coordinate, x2y2:Coordinate) extends Shape {
   override def draw(): List[Pixel] =
-    ((co1._1 to co2._1) flatMap (x => (co1._2 to co2._2) map (y => Pixel((x,y))))).toList
+    ((x1y1._1 to x2y2._1) flatMap (x => (x1y1._2 to x2y2._2) map (y => Pixel((x,y))))).toList
+
 
 }
 sealed case class Rectangle(x1y1:Coordinate, x2y2:Coordinate) extends Shape() {
@@ -29,6 +31,7 @@ sealed case class Rectangle(x1y1:Coordinate, x2y2:Coordinate) extends Shape() {
 
   }
 
+
   private def getRectangleBoundaries(): Boundaries ={
     List((minMax(x1y1._1,x2y2._1),(x: Int) => Pixel((x,x1y1._2))),
       (minMax(x1y1._1,x2y2._1),(x: Int) => Pixel((x,x2y2._2))),
@@ -36,9 +39,21 @@ sealed case class Rectangle(x1y1:Coordinate, x2y2:Coordinate) extends Shape() {
       (minMax(x1y1._2,x2y2._2),(y: Int) => Pixel((x2y2._1,y))))
   }
 }
+
+
 object Shape{
-  def line(co1: Coordinate,co2: Coordinate): Shape = Line(co1,co2)
+  def line(co1: Coordinate,co2: Coordinate): Shape = validateLine(co1,co2)
   def rect(co1: Coordinate,co2: Coordinate): Shape = Rectangle(co1,co2)
+
+
+  private def validateLine(co1:Coordinate,co2:Coordinate) ={
+    (co1,co2) match {
+      case (c1,c2) if(isValid(c1,c2)) => Line(c1,c2)
+      case _  => throw new Error("Coordinates Are not Valid to Draw a Line")
+    }
+  }
+  private def isValid(x1y1:Coordinate,x2y2:Coordinate):Boolean = x1y1._1-x2y2._1 == 0 || x1y1._2-x2y2._2 == 0
+
 }
 
 
