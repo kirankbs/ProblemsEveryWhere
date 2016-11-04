@@ -27,7 +27,7 @@ class MachineTest {
     val machine = Machine(true,100,0)
     //When
     val newMachineState = Machine.simulateMachine1(List(Coin))
-    val (cc,machineActual) = newMachineState(machine)
+    val (cc,machineActual) = newMachineState.run(machine)
     //Then
     cc._1 shouldEqual 1
   }
@@ -38,7 +38,7 @@ class MachineTest {
     val machine = Machine(true,100,10)
     //When
     val newMachineState = Machine.simulateMachine1(List(Coin))
-    val (cc,machineActual) = newMachineState(machine)
+    val (cc,machineActual) = newMachineState.run(machine)
     //Then
     cc._1 shouldEqual 11
   }
@@ -49,7 +49,7 @@ class MachineTest {
     val machine = Machine(true,100,10)
     //When
     val newMachineState = Machine.simulateMachine1(List(Turn))
-    val (cc,machineActual) = newMachineState(machine)
+    val (cc,machineActual) = newMachineState.run(machine)
     //Then
     cc._1 shouldEqual 10
   }
@@ -60,7 +60,7 @@ class MachineTest {
     val machine = Machine(false,100,10)
     //When
     val newMachineState = Machine.simulateMachine1(List(Coin))
-    val (cc,machineActual) = newMachineState(machine)
+    val (cc,machineActual) = newMachineState.run(machine)
     //Then
     cc._1 shouldEqual 10
   }
@@ -71,7 +71,7 @@ class MachineTest {
     val machine = Machine(true,100,10)
     //When
     val newMachineState = Machine.simulateMachine1(List(Turn))
-    val (cc,machineActual) = newMachineState(machine)
+    val (cc,machineActual) = newMachineState.run(machine)
     //Then
     cc._1 shouldEqual 10
   }
@@ -82,7 +82,7 @@ class MachineTest {
     val machine = Machine(true,0,10)
     //When
     val newMachineState = Machine.simulateMachine1(List(Coin))
-    val (cc,machineActual) = newMachineState(machine)
+    val (cc,machineActual) = newMachineState.run(machine)
     //Then
     cc._1 shouldEqual 10
   }
@@ -95,7 +95,7 @@ class MachineTest {
     val machine = Machine(true,10,10)
     //When
     val newMachineState = Machine.simulateMachine1(List(Coin))
-    val (coins,machineActual) = newMachineState(machine)
+    val (coins,machineActual) = newMachineState.run(machine)
     //Then
     machineActual.coins shouldEqual 11
     machineActual.locked shouldEqual false
@@ -106,8 +106,8 @@ class MachineTest {
     //Given
     val machine = Machine(true,100,0)
     //When
-    val newState = Machine.simulateMachine1(List(Turn))
-    val (candies,machineActual) = newState(machine)
+    val newMachineState = Machine.simulateMachine1(List(Turn))
+    val (candies,machineActual) = newMachineState.run(machine)
     //then
     machineActual.candies shouldEqual 100
   }
@@ -117,8 +117,8 @@ class MachineTest {
     //Given
     val machine = Machine(true,100,0)
     //When
-    val newState = Machine.simulateMachine1(List(Coin))
-    val (coins,machineActual) = newState(machine)
+    val newMachineState = Machine.simulateMachine1(List(Coin))
+    val (coins,machineActual) = newMachineState.run(machine)
     //then
     machineActual.candies shouldEqual 100
   }
@@ -128,8 +128,8 @@ class MachineTest {
     //Given
     val machine = Machine(false,100,0)
     //When
-    val newState = Machine.simulateMachine1(List(Turn))
-    val (candies,machineActual) = newState(machine)
+    val newMachineState = Machine.simulateMachine1(List(Turn))
+    val (candies,machineActual) = newMachineState.run(machine)
     //then
     machineActual.candies shouldEqual 99
   }
@@ -139,8 +139,8 @@ class MachineTest {
     //Given
     val machine = Machine(false,100,0)
     //When
-    val newState = Machine.simulateMachine1(List(Turn))
-    val (candies,machineActual) = newState(machine)
+    val newMachineState = Machine.simulateMachine1(List(Turn))
+    val (candies,machineActual) = newMachineState.run(machine)
     //then
     machineActual.candies shouldEqual 99
     machineActual.locked shouldEqual true
@@ -151,8 +151,8 @@ class MachineTest {
     //Given
     val machine = Machine(true,100,0)
     //When
-    val newState = Machine.simulateMachine1(List(Coin,Turn))
-    val (cc,machineActual) = newState(machine)
+    val newMachineState = Machine.simulateMachine1(List(Coin,Turn))
+    val (cc,machineActual) = newMachineState.run(machine)
     //then
     cc._1 shouldEqual 1
     cc._2 shouldEqual 99
