@@ -19,6 +19,6 @@ object Machine{
       case _ => ((s.coins,s.candies),s)
     }
 
-  def simulateMachine(inputs: List[Input]): State[Machine,(Int,Int)] = inputs.map()
+/*  def simulateMachine(inputs: List[Input]): State[Machine,(Int,Int)] = inputs.map()*/
 
 }
